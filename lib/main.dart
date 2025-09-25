@@ -55,10 +55,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String displayText = '';
+  double result = 0;
 
   void numberPressed(String number) {
     setState(() {
       displayText += number;
+    });
+  }
+  void clear() {
+    setState(() {
+      displayText = '';
+    });
+  }
+  void solve() {
+    String finalQuestion = displayText;
+    finalQuestion = finalQuestion.replaceAll('x', '*');
+    finalQuestion = finalQuestion.replaceAll('÷', '/');
+    finalQuestion = finalQuestion.replaceAll('%', '/100');
+    finalQuestion = finalQuestion.replaceAll('-/+', '-1*');
+    finalQuestion = finalQuestion.replaceAll('+-', '-');
+    finalQuestion = finalQuestion.replaceAll('--', '+');
+    finalQuestion = finalQuestion.replaceAll('++', '+');
+    setState(() {
+      displayText = '$result'; 
     });
   }
 
@@ -92,9 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(width: 3),
                 ElevatedButton(onPressed: () => numberPressed('3'), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('3')),
                 SizedBox(width: 3),
-                ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('AC')),
+                ElevatedButton(onPressed: () => clear(), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('AC')),
                 SizedBox(width: 3),
-                ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('÷')),
+                ElevatedButton(onPressed: () => numberPressed('÷'), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('÷')),
                 SizedBox(width: 3),
               ],
             ),
@@ -110,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(width: 3),
                 ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('-/+')),
                 SizedBox(width: 3),
-                ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('×')),
+                ElevatedButton(onPressed: () => numberPressed('x'), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('×')),
                 SizedBox(width: 3),
               ],
             ),
@@ -126,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(width: 3),
                 ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('%')),
                 SizedBox(width: 3),
-                ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('-')),
+                ElevatedButton(onPressed: () => numberPressed('-'), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('-')),
                 SizedBox(width: 3),
               ],
             ),
@@ -140,9 +159,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(width: 3),
                 ElevatedButton(onPressed: () => numberPressed('.'), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('.')),
                 SizedBox(width: 3),
-                ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('=')),
+                ElevatedButton(onPressed: () => solve(), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('=')),
                 SizedBox(width: 3),
-                ElevatedButton(onPressed: null, style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('+')),
+                ElevatedButton(onPressed: () => numberPressed('+'), style: ElevatedButton.styleFrom(fixedSize: const Size(75,40)), child: Text('+')),
                 SizedBox(width: 3),
               ],
             ),
