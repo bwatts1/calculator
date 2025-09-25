@@ -71,14 +71,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children:[
+            Container(
+              padding: EdgeInsets.all(20),
+              alignment: Alignment.center,
+              height: 80,
+              width: 300,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+              ),
+              child:  Text(displayText, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold,),),
+            ),
+           
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(onPressed: () => numberPressed('1'), child: Text('1')),
                 ElevatedButton(onPressed: () => numberPressed('2'), child: Text('2')),
                 ElevatedButton(onPressed: () => numberPressed('3'), child: Text('3')),
+                ElevatedButton(onPressed: null, child: Text('AC')),
+                ElevatedButton(onPressed: null, child: Text('÷')),
               ],
             ),
             Row(
@@ -87,6 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(onPressed: () => numberPressed('4'), child: Text('4')),
                 ElevatedButton(onPressed: () => numberPressed('5'), child: Text('5')),
                 ElevatedButton(onPressed: () => numberPressed('6'), child: Text('6')),
+                ElevatedButton(onPressed: null, child: Text('-/+')),
+                ElevatedButton(onPressed: null, child: Text('×')),
               ],
             ),
             Row(
@@ -95,8 +109,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(onPressed: () => numberPressed('7'), child: Text('7')),
                 ElevatedButton(onPressed: () => numberPressed('8'), child: Text('8')),
                 ElevatedButton(onPressed: () => numberPressed('9'), child: Text('9')),
+                ElevatedButton(onPressed: null, child: Text('%')),
+                ElevatedButton(onPressed: null, child: Text('-'))
               ],
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(onPressed: null ,child: const Icon(Icons.calculate),),
+                ElevatedButton(onPressed: () => numberPressed('0'), child: Text('0')),
+                ElevatedButton(onPressed: () => numberPressed('.'), child: Text('.')),
+                ElevatedButton(onPressed: null, child: Text('=')),
+                ElevatedButton(onPressed: null, child: Text('+')),
+              ],
+            ),
           ]
         ),
       ),
