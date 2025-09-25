@@ -55,7 +55,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String displayText = '';
-  double result = 0;
 
   void numberPressed(String number) {
     setState(() {
@@ -69,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void solve() {
     String finalQuestion = displayText;
+    int z = finalQuestion.length - 1;
     finalQuestion = finalQuestion.replaceAll('x', '*');
     finalQuestion = finalQuestion.replaceAll('÷', '/');
     finalQuestion = finalQuestion.replaceAll('%', '/100');
@@ -76,9 +76,52 @@ class _MyHomePageState extends State<MyHomePage> {
     finalQuestion = finalQuestion.replaceAll('+-', '-');
     finalQuestion = finalQuestion.replaceAll('--', '+');
     finalQuestion = finalQuestion.replaceAll('++', '+');
+    finalQuestion = finalQuestion.replaceAll('/+', '/');
+    finalQuestion = finalQuestion.replaceAll('*+', '*');
+    for (int i = 0; i < z; i++) {
+      if (finalQuestion[i] == '*' || finalQuestion[i] == '/') {
+        if (i == 0 || i+1 == finalQuestion.length - 1 || finalQuestion[i+1] == '*' || finalQuestion[i+1] == '/') {
+          displayText = 'Error: Invalid syntax';
+          return;
+        }
+        else {
+          finalQuestion = finalQuestion.replaceRange(i - 1, i + 1, operate(double.parse(finalQuestion[i-1]), finalQuestion[i], double.parse(finalQuestion[i+1])).toString());
+          i-3;
+          z-2;
+
+        }
+      }
+    }
+    for (int i = 0; i < z; i++) {
+      if (finalQuestion[i] == '+' || finalQuestion[i] == '-') {
+        if (i == 0 || i+1 == finalQuestion.length - 1 || finalQuestion[i+1] == '+' || finalQuestion[i+1] == '-') {
+          displayText = 'Error: Invalid syntax';
+          return;
+        }
+        else {
+          finalQuestion = finalQuestion.replaceRange(i - 1, i + 1, operate(double.parse(finalQuestion[i-1]), finalQuestion[i], double.parse(finalQuestion[i+1])).toString());
+          i-3;
+          z-2;
+
+        }
+      }
+    }
     setState(() {
-      displayText = '$result'; 
+      displayText = finalQuestion; 
     });
+  }
+  double operate(double left, String op, double right) {
+    double resulted = 0;
+    if (op == '*') {
+      resulted = left * right;
+    } else if (op == '/') {
+      resulted = left / right;
+    } else if (op == '+') {
+      resulted = left + right;
+    } else if (op == '-') {
+      resulted = left - right;
+    }
+    return resulted;
   }
 
   @override
