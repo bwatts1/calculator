@@ -68,7 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   void solve() {
     String finalQuestion = displayText;
+    String number = '';
     int z = finalQuestion.length - 1;
+    List<String> equation = [];
     finalQuestion = finalQuestion.replaceAll('x', '*');
     finalQuestion = finalQuestion.replaceAll('÷', '/');
     finalQuestion = finalQuestion.replaceAll('%', '/100');
@@ -78,16 +80,28 @@ class _MyHomePageState extends State<MyHomePage> {
     finalQuestion = finalQuestion.replaceAll('++', '+');
     finalQuestion = finalQuestion.replaceAll('/+', '/');
     finalQuestion = finalQuestion.replaceAll('*+', '*');
+    for (int i = 0; i < finalQuestion.length; i++) {
+      if (finalQuestion[i] == '+' || finalQuestion[i] == '-' || finalQuestion[i] == '*' || finalQuestion[i] == '/') {
+        equation.add(finalQuestion.substring(0, i));
+        equation.add(finalQuestion[i]);
+        equation.add(number);
+        finalQuestion = finalQuestion.substring(i + 1);
+        i = 0;
+      }
+      else {
+        number += finalQuestion[i];
+      }
+    }
     for (int i = 0; i < z; i++) {
-      if (finalQuestion[i] == '*' || finalQuestion[i] == '/') {
+      if (equation[i] == '*' || equation[i] == '/' || equation[i] == '') {
         if (i == 0 || i+1 == finalQuestion.length - 1 || finalQuestion[i+1] == '*' || finalQuestion[i+1] == '/') {
           displayText = 'Error: Invalid syntax';
           return;
         }
         else {
           finalQuestion = finalQuestion.replaceRange(i - 1, i + 1, operate(double.parse(finalQuestion[i-1]), finalQuestion[i], double.parse(finalQuestion[i+1])).toString());
-          i-3;
-          z-2;
+          i-=3;
+          z-=2;
 
         }
       }
@@ -100,8 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         else {
           finalQuestion = finalQuestion.replaceRange(i - 1, i + 1, operate(double.parse(finalQuestion[i-1]), finalQuestion[i], double.parse(finalQuestion[i+1])).toString());
-          i-3;
-          z-2;
+          i-=3;
+          z-=2;
 
         }
       }
