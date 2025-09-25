@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       displayText += number;
     });
   }
+  
   void clear() {
     setState(() {
       displayText = '';
