@@ -67,10 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
   void solve() {
+  try {
     String finalQuestion = displayText;
     String number = '';
-    int z = finalQuestion.length - 1;
     List<String> equation = [];
+
+    // Replace symbols to standard operators
     finalQuestion = finalQuestion.replaceAll('x', '*');
     finalQuestion = finalQuestion.replaceAll('÷', '/');
     finalQuestion = finalQuestion.replaceAll('%', '/100');
@@ -80,50 +82,65 @@ class _MyHomePageState extends State<MyHomePage> {
     finalQuestion = finalQuestion.replaceAll('++', '+');
     finalQuestion = finalQuestion.replaceAll('/+', '/');
     finalQuestion = finalQuestion.replaceAll('*+', '*');
+
+    // Build the equation list from the string
     for (int i = 0; i < finalQuestion.length; i++) {
-      if (finalQuestion[i] == '+' || finalQuestion[i] == '-' || finalQuestion[i] == '*' || finalQuestion[i] == '/') {
-        equation.add(finalQuestion.substring(0, i));
-        equation.add(finalQuestion[i]);
+      String ch = finalQuestion[i];
+
+      if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
+        if (number.isEmpty) {
+          displayText = 'Error: Invalid syntax';
+          setState(() {});
+          return;
+        }
         equation.add(number);
-        finalQuestion = finalQuestion.substring(i + 1);
-        i = 0;
-      }
-      else {
-        number += finalQuestion[i];
+        equation.add(ch);
+        number = '';
+      } else {
+        number += ch;
       }
     }
-    for (int i = 0; i < z; i++) {
-      if (equation[i] == '*' || equation[i] == '/' || equation[i] == '') {
-        if (i == 0 || i+1 == finalQuestion.length - 1 || finalQuestion[i+1] == '*' || finalQuestion[i+1] == '/') {
-          displayText = 'Error: Invalid syntax';
-          return;
-        }
-        else {
-          finalQuestion = finalQuestion.replaceRange(i - 1, i + 1, operate(double.parse(finalQuestion[i-1]), finalQuestion[i], double.parse(finalQuestion[i+1])).toString());
-          i-=3;
-          z-=2;
 
-        }
-      }
+    if (number.isNotEmpty) {
+      equation.add(number);
     }
-    for (int i = 0; i < z; i++) {
-      if (finalQuestion[i] == '+' || finalQuestion[i] == '-') {
-        if (i == 0 || i+1 == finalQuestion.length - 1 || finalQuestion[i+1] == '+' || finalQuestion[i+1] == '-') {
-          displayText = 'Error: Invalid syntax';
-          return;
-        }
-        else {
-          finalQuestion = finalQuestion.replaceRange(i - 1, i + 1, operate(double.parse(finalQuestion[i-1]), finalQuestion[i], double.parse(finalQuestion[i+1])).toString());
-          i-=3;
-          z-=2;
 
-        }
+    // First pass: *, /
+    for (int i = 0; i < equation.length; i++) {
+      if (equation[i] == '*' || equation[i] == '/') {
+        double left = double.parse(equation[i - 1]);
+        double right = double.parse(equation[i + 1]);
+
+        double result = operate(left, equation[i], right);
+
+        equation.replaceRange(i - 1, i + 2, [result.toString()]);
+        i = -1; // Restart the loop
       }
     }
+
+    // Second pass: +, -
+    for (int i = 0; i < equation.length; i++) {
+      if (equation[i] == '+' || equation[i] == '-') {
+        double left = double.parse(equation[i - 1]);
+        double right = double.parse(equation[i + 1]);
+
+        double result = operate(left, equation[i], right);
+
+        equation.replaceRange(i - 1, i + 2, [result.toString()]);
+        i = -1; // Restart the loop
+      }
+    }
+
     setState(() {
-      displayText = finalQuestion; 
+      displayText = equation.first;
+    });
+  } catch (e) {
+    setState(() {
+      displayText = 'Error';
     });
   }
+}
+
   double operate(double left, String op, double right) {
     double resulted = 0;
     if (op == '*') {
